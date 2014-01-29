@@ -56,6 +56,7 @@ GEM
     minitest (4.7.5)
     multi_json (1.8.4)
     multipart-post (2.0.0)
+    pg (0.17.1)
     polyglot (0.3.3)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
@@ -130,6 +131,7 @@ DEPENDENCIES
   faraday
   jbuilder (~> 1.2)
   jquery-rails
+  pg
   quiet_assets
   rails (= 4.0.2)
   rspec-rails
