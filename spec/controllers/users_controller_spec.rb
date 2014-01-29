@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe UsersController do
-  context 'post' do
+  context 'post create' do
     before do
       post :create, user: {name: 'name', device_token:'device_token'}, format: 'json'
       @user = User.where(name: 'name').first
