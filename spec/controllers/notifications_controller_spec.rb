@@ -1,5 +1,18 @@
 require 'spec_helper'
 describe NotificationsController do
+  context 'search' do
+    before do
+      Notification.delete_all
+      user = User.create!(name: 'name')
+      Notification.create!(user_id: user.id, device_token: 'device_token', hour: 10, minute: 30)
+      get :search, hour: 10, minute: 30, format: :json
+      @json = JSON.parse(response.body)
+    end
+    subject { @json.first }
+    its(['device_token']) { should eq 'device_token' }
+    its(['user_name']) { should eq 'name' }
+  end
+
   context 'post create' do
     context 'registered user' do
       before do

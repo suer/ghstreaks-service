@@ -1,6 +1,14 @@
 class NotificationsController < ApplicationController
   before_action :set_notification, only: [:show, :edit, :update, :destroy]
 
+  def search
+    @notifications = Notification.includes(:user).where(hour: params[:hour], minute: params[:minute])
+    #render json: Notification.includes(:user).where(hour: params[:hour], minute: params[:minute])
+  end
+
+  def show
+  end
+
   def create
     @notification = Notification.new(notification_params)
     begin
