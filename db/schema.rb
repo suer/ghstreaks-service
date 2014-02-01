@@ -11,11 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140129114750) do
+ActiveRecord::Schema.define(version: 20140201043914) do
+
+  create_table "notifications", force: true do |t|
+    t.integer  "user_id"
+    t.string   "device_token"
+    t.integer  "hour"
+    t.integer  "minute"
+    t.datetime "last_notification_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "name"
-    t.string   "device_token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
