@@ -14,15 +14,13 @@ class NotificationsController < ApplicationController
 
   def create
     @notification = Notification.new(notification_params)
-    begin
-      user = User.find(params[:notification][:name])
-      user.notifications << @notification
-    rescue ActiveRecord::RecordNotFound
-      render json: {error: "User #{params[:notification][:name]} not found"}, status: :unprocessable_entity
-      return
-    end
-
     if @notification.save
+      begin
+        user = User.find(params[:notification][:name])
+      rescue ActiveRecord::RecordNotFound
+        user = User.create!(name: params[:notification][:name])
+      end
+      user.notifications << @notification
       render action: 'show', status: :created, location: @notification
     else
       render json: @notification.errors, status: :unprocessable_entity

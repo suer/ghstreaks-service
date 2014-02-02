@@ -32,8 +32,8 @@ describe NotificationsController do
         post :create, notification: {name: 'name', device_token: 'device_token', hour: 18, minute: 30}, format: 'json'
         @json = JSON.parse(response.body)
       end
-      subject { @json }
-      its(["error"]) { should eq 'User name not found' }
+      subject { User.find('name') }
+      its(:name) { should eq 'name' }
     end
   end
 end
