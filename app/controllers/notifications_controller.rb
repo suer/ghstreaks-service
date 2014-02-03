@@ -21,6 +21,7 @@ class NotificationsController < ApplicationController
         user = User.create!(name: params[:notification][:name])
       end
       user.notifications << @notification
+      ZeroPush.register(@notification.device_token)
       render action: 'show', status: :created, location: @notification
     else
       render json: @notification.errors, status: :unprocessable_entity

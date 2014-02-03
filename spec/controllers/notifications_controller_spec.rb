@@ -16,6 +16,7 @@ describe NotificationsController do
   context 'post create' do
     context 'registered user' do
       before do
+        ZeroPush.stub(:register) { nil }
         @user = User.create!(name: 'name')
         post :create, notification: {name: 'name', device_token: 'device_token', hour: 18, minute: 30}, format: 'json'
         @notification = Notification.where(user_id: @user.id, device_token: 'device_token').first
@@ -28,6 +29,7 @@ describe NotificationsController do
 
     context 'unregistered user' do
       before do
+        ZeroPush.stub(:register) { nil }
         User.delete_all(name: 'name')
         post :create, notification: {name: 'name', device_token: 'device_token', hour: 18, minute: 30}, format: 'json'
         @json = JSON.parse(response.body)

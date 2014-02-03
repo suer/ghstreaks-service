@@ -51,5 +51,6 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'faraday'
+gem 'faraday', '= 0.8.5'
 gem 'friendly_id'
+gem 'zero_push'
