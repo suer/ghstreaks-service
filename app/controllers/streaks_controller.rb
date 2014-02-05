@@ -7,11 +7,17 @@ class StreaksController < ApplicationController
   def get_streaks(username)
     url = "https://github.com/users/#{username}/contributions_calendar_data"
     response = Faraday.get url
-    streaks = JSON.parse(response.body)
+    first_streak, *rest_streaks = JSON.parse(response.body).reverse
 
-    streaks.reverse.each_with_index do |streak, i|
-      return {current_streaks: i} if streak[1] == 0
+    hash = {current_streaks: 0}
+
+    hash[:current_streaks] += 1 if first_streak[1] > 0
+
+    rest_streaks.each do |streak|
+      break if streak[1] == 0
+      hash[:current_streaks] += 1
     end
-    {current_streaks: streaks.size}
+
+    hash
   end
 end
