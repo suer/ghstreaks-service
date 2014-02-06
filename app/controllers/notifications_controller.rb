@@ -13,14 +13,10 @@ class NotificationsController < ApplicationController
   end
 
   def create
-    @notification = Notification.new(notification_params)
-    if @notification.save
-      begin
-        user = User.find(params[:notification][:name])
-      rescue ActiveRecord::RecordNotFound
-        user = User.create!(name: params[:notification][:name])
-      end
-      user.notifications << @notification
+    user = User.find_or_create(name: params[:notification][:name])
+    @notification = Notification.find_or_create(notification_params, user)
+
+    if @notification
       ZeroPush.register(@notification.device_token)
       render action: 'show', status: :created, location: @notification
     else

@@ -1,5 +1,10 @@
 require 'spec_helper'
 describe NotificationsController do
+
+  before do
+    ZeroPush.stub(:register) { nil }
+  end
+
   context 'search' do
     before do
       Notification.delete_all
@@ -16,7 +21,6 @@ describe NotificationsController do
   context 'post create' do
     context 'registered user' do
       before do
-        ZeroPush.stub(:register) { nil }
         @user = User.create!(name: 'name')
         post :create, notification: {name: 'name', device_token: 'device_token', hour: 18, minute: 30}, format: 'json'
         @notification = Notification.where(user_id: @user.id, device_token: 'device_token').first
@@ -27,9 +31,19 @@ describe NotificationsController do
       its(:minute) { should eq 30 }
     end
 
+    context 'dupricated notifications' do
+      before do
+        @user = User.create!(name: 'name')
+        post :create, notification: {name: 'name', device_token: 'device_token', hour: 18, minute: 30}, format: 'json'
+        post :create, notification: {name: 'name', device_token: 'device_token', hour: 18, minute: 30}, format: 'json'
+        @notifications = Notification.where(user_id: @user.id, device_token: 'device_token', hour: 18, minute: 30)
+      end
+      subject { @notifications }
+      its(:size) { should eq 1 }
+    end
+
     context 'unregistered user' do
       before do
-        ZeroPush.stub(:register) { nil }
         User.delete_all(name: 'name')
         post :create, notification: {name: 'name', device_token: 'device_token', hour: 18, minute: 30}, format: 'json'
         @json = JSON.parse(response.body)
