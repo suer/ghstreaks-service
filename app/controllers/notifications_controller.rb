@@ -14,7 +14,7 @@ class NotificationsController < ApplicationController
 
   def create
     user = User.find_or_create(name: params[:notification][:name])
-    @notification = Notification.find_or_create(notification_params, user)
+    @notification = Notification.create_and_add_to_user(notification_params, user)
 
     if @notification
       ZeroPush.register(@notification.device_token)

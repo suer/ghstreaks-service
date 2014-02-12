@@ -1,10 +1,14 @@
 class Notification < ActiveRecord::Base
   belongs_to :user
 
-  def self.find_or_create(params, user)
+  def self.create_and_add_to_user(params, user)
     params[:hour]   ||= 17
     params[:minute] ||= 0
-    notification = Notification.where(params).first || Notification.create(params)
+    if user.notifications.exists?
+Rails.logger.info "hgoe"
+      Notification.delete_all(user_id: user.id)
+    end
+    notification = Notification.create(params)
     user.notifications << notification
     notification
   end

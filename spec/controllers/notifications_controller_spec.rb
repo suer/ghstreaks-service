@@ -51,5 +51,18 @@ describe NotificationsController do
       subject { User.find('name') }
       its(:name) { should eq 'name' }
     end
+
+    context 'registered notification' do
+      before do
+        ZeroPush.stub(:register) { nil }
+        User.delete_all(name: 'name')
+        user = User.create(name: 'name')
+        notification = Notification.create(device_token: 'device_token', hour: 18, minute:30)
+        user.notifications << notification
+        post :create, notification: {name: 'name', device_token: 'device_token', hour: 19, minute: 30}, format: 'json'
+      end
+      subject { User.find('name').notifications }
+      its(:size) { should eq 1 }
+    end
   end
 end
