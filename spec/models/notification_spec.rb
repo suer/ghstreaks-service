@@ -4,7 +4,7 @@ describe Notification do
   describe 'find_or_create' do
     context 'if notifications not exists yet' do
       before do
-        @params = {device_token: 'token', hour: 17, minute: 0, timezone: 'JST'}
+        @params = {device_token: 'token', hour: 17, minute: 0, utc_offset: 9}
         @user = User.create(name: 'name')
         Notification.delete_all
         Notification.create_and_add_to_user(@params, @user)
@@ -15,7 +15,7 @@ describe Notification do
 
     context 'if a notification exists already' do
       before do
-        @params = {device_token: 'token', hour: 17, minute: 0, timezone: 'JST'}
+        @params = {device_token: 'token', hour: 17, minute: 0, utc_offset: 9}
         @user = User.create(name: 'name')
         Notification.delete_all
         @user.notifications << Notification.create(@params)
