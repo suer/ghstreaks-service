@@ -5,7 +5,6 @@ class Notification < ActiveRecord::Base
     params[:hour]   ||= 17
     params[:minute] ||= 0
     if user.notifications.exists?
-Rails.logger.info "hgoe"
       Notification.delete_all(user_id: user.id)
     end
     notification = Notification.create(params)
