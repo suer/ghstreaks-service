@@ -40,6 +40,6 @@ class NotificationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def notification_params
-      params.require(:notification).permit(:user_id, :device_token, :hour, :minute, :last_notification_at)
+      params.require(:notification).permit(:user_id, :device_token, :hour, :minute, :timezone, :last_notification_at)
     end
 end

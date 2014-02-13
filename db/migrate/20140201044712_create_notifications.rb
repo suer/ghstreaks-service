@@ -5,6 +5,7 @@ class CreateNotifications < ActiveRecord::Migration
       t.string :device_token
       t.integer :hour
       t.integer :minute
+      t.string :timezone
       t.timestamp :last_notification_at
 
       t.timestamps

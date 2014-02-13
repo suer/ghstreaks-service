@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20140201044712) do
     t.string   "device_token"
     t.integer  "hour"
     t.integer  "minute"
+    t.string   "timezone"
     t.datetime "last_notification_at"
     t.datetime "created_at"
     t.datetime "updated_at"

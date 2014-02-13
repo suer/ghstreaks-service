@@ -1,6 +1,11 @@
 class Notification < ActiveRecord::Base
   belongs_to :user
 
+  validates :device_token, presence: true
+  validates :hour, presence: true
+  validates :minute, presence: true
+  validates :timezone, presence: true
+
   def self.create_and_add_to_user(params, user)
     params[:hour]   ||= 17
     params[:minute] ||= 0
