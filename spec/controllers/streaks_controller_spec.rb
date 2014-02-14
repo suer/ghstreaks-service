@@ -4,7 +4,7 @@ describe StreaksController do
 
   describe "GET 'index'" do
     before do
-      res = mock
+      res = double
       res.stub(:body) { '[["2014/01/01", 0], ["2014/01/02", 1], ["2014/01/03", 1]]' }
       Faraday.stub(:get) { res }
     end
@@ -16,7 +16,7 @@ describe StreaksController do
 
   describe "GET 'index'" do
     before do
-      res = mock
+      res = double
       res.stub(:body) { '[["2014/01/01", 0], ["2014/01/02", 1], ["2014/01/03", 0]]' }
       Faraday.stub(:get) { res }
     end

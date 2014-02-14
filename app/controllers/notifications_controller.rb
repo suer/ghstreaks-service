@@ -3,7 +3,7 @@ class NotificationsController < ApplicationController
 
   def search
     @notifications = if params[:hour]
-      Notification.includes(:user).where(hour: params[:hour], minute: params[:minute])
+      Notification.includes(:user).where(hour: params[:hour])
     else
       Notification.includes(:user).all
     end
@@ -40,6 +40,6 @@ class NotificationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def notification_params
-      params.require(:notification).permit(:user_id, :device_token, :hour, :minute, :utc_offset, :last_notification_at)
+      params.require(:notification).permit(:user_id, :device_token, :hour, :utc_offset, :last_notification_at)
     end
 end
