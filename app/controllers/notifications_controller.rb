@@ -3,7 +3,7 @@ class NotificationsController < ApplicationController
 
   def search
     @notifications = if params[:hour]
-      Notification.includes(:user).where(hour: params[:hour])
+      Notification.includes(:user).where(utc_hour: params[:hour])
     else
       Notification.includes(:user).all
     end

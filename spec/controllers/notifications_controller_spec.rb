@@ -10,7 +10,7 @@ describe NotificationsController do
       Notification.delete_all
       user = User.create!(name: 'name')
       Notification.create!(user_id: user.id, device_token: 'device_token', hour: 10,  utc_offset: 9)
-      get :search, hour: 10,  format: :json
+      get :search, hour: 1,  format: :json
       @json = JSON.parse(response.body)
     end
     subject { @json.first }
