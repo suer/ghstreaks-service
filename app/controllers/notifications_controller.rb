@@ -14,13 +14,18 @@ class NotificationsController < ApplicationController
 
   def create
     user = User.find_or_create(name: params[:notification][:name])
-    @notification = Notification.create_and_add_to_user(notification_params, user)
+    begin
+      @notification = Notification.register(notification_params, user)
+    rescue ActiveRecord::RecordInvalid
+      render json: {error: 'cannot save notification', params: params}, status: :unprocessable_entity
+      return
+    end
 
     if @notification
       ZeroPush.register(@notification.device_token)
       render action: 'show', status: :created, location: @notification
     else
-      render json: @notification.errors, status: :unprocessable_entity
+      render json: {error: 'cannot save notification', params: notification_params}, status: :unprocessable_entity
     end
   end
 
@@ -28,7 +33,7 @@ class NotificationsController < ApplicationController
     if @notification.update(notification_params)
       head :no_content
     else
-      render json: @notification.errors, status: :unprocessable_entity
+      render json: {error: 'cannot save notification', params: notification_params}, status: :unprocessable_entity
     end
   end
 

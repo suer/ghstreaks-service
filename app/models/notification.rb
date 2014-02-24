@@ -9,12 +9,12 @@ class Notification < ActiveRecord::Base
     self.utc_hour = (self.hour - self.utc_offset) % 24
   end
 
-  def self.create_and_add_to_user(params, user)
-    if user.notifications.exists?
-      Notification.delete_all(user_id: user.id, device_token: params[:device_token])
-    end
-    notification = Notification.create(params)
-    user.notifications << notification
+  def self.register(params, user)
+    notification = Notification.where(device_token: params[:device_token]).first || Notification.new(device_token: params[:device_token])
+    notification.hour = params[:hour]
+    notification.utc_offset = params[:utc_offset]
+    notification.user_id = user.id
+    notification.save!
     notification
   end
 end

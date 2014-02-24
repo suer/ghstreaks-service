@@ -63,5 +63,19 @@ describe NotificationsController do
       subject { User.find('name').notifications }
       its(:size) { should eq 1 }
     end
+
+    context 'missing params' do
+      before do
+        ZeroPush.stub(:register) { nil }
+        User.delete_all(name: 'name')
+        user = User.create(name: 'name')
+        notification = Notification.create(device_token: 'device_token', hour: 18, utc_offset: 9)
+        user.notifications << notification
+        post :create, notification: {name: 'name'}, format: 'json'
+        @json = JSON.parse(response.body)
+      end
+      subject { JSON.parse(response.body) }
+      its(['error']) { should_not be_nil }
+    end
   end
 end
