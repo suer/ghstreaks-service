@@ -13,6 +13,11 @@ class NotificationsController < ApplicationController
   end
 
   def create
+    unless params[:notification] and not params[:notification][:name].blank?
+      render json: {error: 'parameter notification[name] missing', params: params}, status: :unprocessable_entity
+      return
+    end
+
     user = User.find_or_create(name: params[:notification][:name])
     begin
       @notification = Notification.register(notification_params, user)
