@@ -18,6 +18,11 @@ class NotificationsController < ApplicationController
       return
     end
 
+    unless github_user_exists(params[:notification][:name])
+      render json: {error: "GitHub user '#{params[:notification][:name]}' does not exist", params: params}, status: :unprocessable_entity
+      return
+    end
+
     user = User.find_or_create(name: params[:notification][:name])
     begin
       @notification = Notification.register(notification_params, user)
@@ -51,5 +56,10 @@ class NotificationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def notification_params
       params.require(:notification).permit(:user_id, :device_token, :hour, :utc_offset, :last_notification_at)
+    end
+
+    def github_user_exists(username)
+      response = Faraday.get("https://api.github.com/users/#{username}")
+      response.status < 300
     end
 end

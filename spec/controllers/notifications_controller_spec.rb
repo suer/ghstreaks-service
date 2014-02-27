@@ -19,10 +19,13 @@ describe NotificationsController do
   end
 
   context 'post create' do
+    before do
+      controller.stub(:github_user_exists) { true }
+    end
     context 'registered user' do
       before do
-        @user = User.create!(name: 'name')
-        post :create, notification: {name: 'name', device_token: 'device_token', hour: 18,  utc_offset: 9}, format: 'json'
+        @user = User.create!(name: 'a name')
+        post :create, notification: {name: 'a name', device_token: 'device_token', hour: 18,  utc_offset: 9}, format: 'json'
         @notification = Notification.where(user_id: @user.id, device_token: 'device_token').first
       end
       subject { @notification }
