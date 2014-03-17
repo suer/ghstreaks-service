@@ -8,3 +8,11 @@ Preference
 
 * environment variables
   - ZEROPUSH\_AUTH\_TOKEN
+
+How to run
+------------------
+
+  $ bundle install --path .bundle
+  $ bundle install rake db:migrate RAILS\_ENV=production
+  $ bundle exec rails server
+
