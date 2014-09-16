@@ -5,19 +5,14 @@ class StreaksController < ApplicationController
 
   private
   def get_streaks(username)
-    url = "https://github.com/users/#{username}/contributions_calendar_data"
-    response = Faraday.get url
-    first_streak, *rest_streaks = JSON.parse(response.body).reverse
-
     hash = {current_streaks: 0}
-
-    hash[:current_streaks] += 1 if first_streak[1] > 0
-
-    rest_streaks.each do |streak|
-      break if streak[1] == 0
-      hash[:current_streaks] += 1
-    end
-
+    url = "https://github.com/#{username}"
+    html = Nokogiri::HTML(Faraday.get(url).body)
+    node = html.css(".contrib-streak-current > .num")
+    return hash if node.empty?
+    hash[:current_streaks] = node.text.split.first.to_i
     hash
+  rescue
+    {current_streaks: 0}
   end
 end

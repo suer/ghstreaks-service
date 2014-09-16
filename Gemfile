@@ -54,3 +54,4 @@ end
 gem 'faraday', '= 0.8.5'
 gem 'friendly_id'
 gem 'zero_push'
+gem 'nokogiri'
