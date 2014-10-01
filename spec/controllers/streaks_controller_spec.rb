@@ -5,7 +5,7 @@ describe StreaksController do
   describe "GET 'index'" do
     before do
       res = double
-      res.stub(:body) { '<div class="contrib-streak-current"><span class="num">2 days</span></div>' }
+      res.stub(:body) { '<div class="contrib-column"><span class="contrib-number">2 days</span></div>' }
       Faraday.stub(:get) { res }
     end
     it "last streak is not 0" do
