@@ -14,20 +14,27 @@ class NotificationsController < ApplicationController
 
   def create
     unless params[:notification] and not params[:notification][:name].blank?
-      render json: {error: 'parameter notification[name] missing', params: params}, status: :unprocessable_entity
+      message = 'parameter notification[name] missing'
+      logger.error(message)
+      render json: {error: message, params: params}, status: :unprocessable_entity
       return
     end
 
     unless github_user_exists(params[:notification][:name])
-      render json: {error: "GitHub user '#{params[:notification][:name]}' does not exist", params: params}, status: :unprocessable_entity
+      message = "GitHub user '#{params[:notification][:name]}' does not exist"
+      logger.error(message)
+      render json: {error: message, params: params}, status: :unprocessable_entity
       return
     end
 
     user = User.find_or_create(name: params[:notification][:name])
     begin
       @notification = Notification.register(notification_params, user)
-    rescue ActiveRecord::RecordInvalid
-      render json: {error: 'cannot save notification', params: params}, status: :unprocessable_entity
+    rescue ActiveRecord::RecordInvalid => e
+      message = 'cannot save notification'
+      logger.error(message)
+      logger.error(e.backtrace.join("\n"))
+      render json: {error: message, params: params}, status: :unprocessable_entity
       return
     end
 
@@ -35,6 +42,7 @@ class NotificationsController < ApplicationController
       ZeroPush.register(@notification.device_token)
       render action: 'show', status: :created, location: @notification
     else
+      logger.error('cannot save notification')
       render json: {error: 'cannot save notification', params: notification_params}, status: :unprocessable_entity
     end
   end
