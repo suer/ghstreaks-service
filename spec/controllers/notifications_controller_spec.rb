@@ -1,10 +1,6 @@
 require 'spec_helper'
 describe NotificationsController do
 
-  before do
-    ZeroPush.stub(:register) { nil }
-  end
-
   context 'search' do
     before do
       Notification.delete_all
@@ -56,7 +52,6 @@ describe NotificationsController do
 
     context 'registered notification' do
       before do
-        ZeroPush.stub(:register) { nil }
         User.delete_all(name: 'name')
         user = User.create(name: 'name')
         notification = Notification.create(device_token: 'device_token', hour: 18, utc_offset: 9)
@@ -69,7 +64,6 @@ describe NotificationsController do
 
     context 'missing params' do
       before do
-        ZeroPush.stub(:register) { nil }
         User.delete_all(name: 'name')
         user = User.create(name: 'name')
         notification = Notification.create(device_token: 'device_token', hour: 18, utc_offset: 9)

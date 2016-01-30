@@ -39,7 +39,6 @@ class NotificationsController < ApplicationController
     end
 
     if @notification
-      ZeroPush.register(@notification.device_token)
       render action: 'show', status: :created, location: @notification
     else
       logger.error('cannot save notification')
